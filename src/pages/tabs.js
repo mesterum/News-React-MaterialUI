@@ -6,6 +6,8 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
+import NewsList from "./page1";
+import Bookmarks from "./pageBM";
 
 function TabContainer({ children, dir }) {
   return (
@@ -23,7 +25,9 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: 500
+    flexGrow: 1,
+    width: "100%"
+    // width: 500
   }
 });
 
@@ -45,17 +49,18 @@ class FullWidthTabs extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="default">
+        <AppBar position="sticky" color="default">
           <Tabs
             value={this.state.value}
             onChange={this.handleChange}
             indicatorColor="primary"
             textColor="primary"
-            variant="fullWidth"
+            variant="scrollable"
+            scrollButtons="on"
           >
-            <Tab label="Item One" />
+            <Tab label="News" />
+            <Tab label="Bookmarks" />
             <Tab label="Main" />
-            <Tab label="Item Two" />
             <Tab label="Item Three" />
           </Tabs>
         </AppBar>
@@ -64,9 +69,9 @@ class FullWidthTabs extends React.Component {
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer dir={theme.direction}>Item One</TabContainer>
+          <NewsList />
+          <Bookmarks />
           {children}
-          <TabContainer dir={theme.direction}>Item Two</TabContainer>
           <TabContainer dir={theme.direction}>Item Three</TabContainer>
         </SwipeableViews>
       </div>

@@ -16,8 +16,10 @@ import Bookmark from "@material-ui/icons/Bookmark";
 import BookmarkBorder from "@material-ui/icons/BookmarkBorder";
 import NotInterested from "@material-ui/icons/NotInterested";
 import Link from "@material-ui/core/Link";
+import TimeAgo from "react-timeago";
+import { isBookmarked, setBookmark } from "../util/storeNews";
 
-const data = {
+let data = {
   source: {
     id: null,
     name: "Seekingalpha.com"
@@ -36,18 +38,21 @@ const data = {
 
 const styles = theme => ({
   card: {
-    display: "flex"
+    display: "flex",
+    justifyContent: "space-between"
   },
   details: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    justifyContent: "space-around"
   },
   content: {
-    flex: "1 0 auto"
+    flex: "1 0 auto",
+    justifyContent: "space-around"
   },
   cover: {
-    width: 151,
-    height: 120
+    width: 150,
+    height: 100
   },
   title: {
     display: "flex",
@@ -59,21 +64,38 @@ const styles = theme => ({
 });
 
 function MediaControlCard(props) {
-  const { classes } = props;
+  const { classes, article, bookmarked = "?" } = props;
+  const { urlToImage } = data;
+  if (article) {
+    data = { ...article, urlToImage };
+  }
+  const [stateBM, setState] = React.useState(bookmarked);
+  React.useEffect(() => {
+    if (stateBM == "?") {
+      isBookmarked(article).then(setState);
+    }
+  }, []);
+
+  const handleChange = event => {
+    const checked = event.target.checked;
+    setBookmark(article, checked).then(setState);
+  };
 
   return (
     <Card className={classes.card}>
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography variant="subtitle1" color="textSecondary">
-            {data.publishedAt} <b>{data.source.name}</b>
-          </Typography>
-          <Typography component="h5" variant="subtitle2">
-            {data.title}
+            <TimeAgo date={data.publishedAt} /> <b>{data.source.name}</b>
           </Typography>
           <Link href={data.url} target="NewsPage" underline="none">
-            <CardActionArea>
-              <Typography variant="body1">{data.description}</Typography>
+            <CardActionArea className={classes.content}>
+              <Typography component="h5" variant="subtitle2">
+                {data.title}
+              </Typography>
+              <Typography variant="body2" component="p">
+                {data.description}
+              </Typography>
             </CardActionArea>
           </Link>
         </CardContent>
@@ -94,6 +116,8 @@ function MediaControlCard(props) {
             icon={<BookmarkBorder />}
             checkedIcon={<Bookmark />}
             value="checkedC"
+            checked={stateBM}
+            onChange={handleChange}
           />
           <IconButton aria-label="NotInterested" className={classes.margin}>
             <NotInterested />
