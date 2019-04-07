@@ -21,5 +21,11 @@
     "eject": "react-scripts eject"
   },
   "keywords": [],
-  "description": "https://material-ui.com"
+  "description": "https://material-ui.com",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

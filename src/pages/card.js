@@ -17,7 +17,7 @@ import BookmarkBorder from "@material-ui/icons/BookmarkBorder";
 import NotInterested from "@material-ui/icons/NotInterested";
 import Link from "@material-ui/core/Link";
 import TimeAgo from "react-timeago";
-import { isBookmarked, setBookmark } from "../util/storeNews";
+// import { isBookmarked, setBookmark } from "../util/storeNews";
 
 let data = {
   source: {
@@ -64,21 +64,29 @@ const styles = theme => ({
 });
 
 function MediaControlCard(props) {
-  const { classes, article, bookmarked = "?" } = props;
+  if(!props.bmList) return null
+  const { classes, article, bookmarked = "?", bmList } = props;
+  let [newsList, setNewsList] = bmList;//
+
   const { urlToImage } = data;
   if (article) {
     data = { ...article, urlToImage };
   }
-  const [stateBM, setState] = React.useState(bookmarked);
+  const [stateBM, setState] = React.useState(false);
   React.useEffect(() => {
     if (stateBM == "?") {
-      isBookmarked(article).then(setState);
+      newsList.isBookmarked(article).then(setState);
     }
-  }, []);
+    if(typeof bookmarked.then == "function")
+      bookmarked.then(setState)
+    else setState(Boolean(bookmarked))
+  }, [bookmarked]);
 
   const handleChange = event => {
     const checked = event.target.checked;
-    setBookmark(article, checked).then(setState);
+    setState(checked);
+    newsList.setBookmark(article, checked)
+      .then(()=>setNewsList(newsList))
   };
 
   return (

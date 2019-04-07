@@ -1,31 +1,28 @@
 import Card from "./card";
-import { getAllBookmarks } from "../util/storeNews";
 import React from "react";
 
-function Bookmarks() {
-  let [newsList, setNewsList] = React.useState([]);
-  React.useEffect(() => {
-    getAllBookmarks().then(r => {
-      console.log(r);
-      setNewsList(r);
-    });
-  }, []);
+export default function Bookmarks(props) {
+  // if(!props.bmList) return null
+  // else 
+  //   console.log("Bookmarks",props)
+  const {bmList} = props
+  let [newsList, setbmList] = bmList;//, setNewsList
 
   return (
     <>
-      {newsList //.sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))
-        .map(article => (
-          <Card key={article.url} bookmarked {...{ article }} />
-        ))}
+      {Array.from(newsList.values(),
+        article => (
+          <Card key={article.url} bookmarked {...{ article, bmList }} />
+        )).reverse()}
     </>
   );
 }
 
-export default () => (
-  <ErrorBoundary>
-    <Bookmarks />
-  </ErrorBoundary>
-);
+// () => (
+//   <ErrorBoundary>
+//     <Bookmarks />
+//   </ErrorBoundary>
+// );
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);

@@ -16,28 +16,37 @@ db.bookmarks
   .delete();
 
 export async function isBookmarked(article) {
+  if(Map.prototype.isPrototypeOf(this)){
+    return this.has(article.url)
+  }
   const rec = await db.bookmarks.get(article.url);
   return Boolean(rec && rec.bookmarkedAt);
 }
 
 export async function setBookmark(article, set) {
+  if(Map.prototype.isPrototypeOf(this)){
+    this[set?"set":"delete"](article.url,article)
+  }
   const updates = await db.bookmarks.update(article.url, {
     bookmarkedAt: set ? Date.now() : 0
   });
-  if (updates == 0) {
-    if (set) {
-      await db.bookmarks.put({ ...article, bookmarkedAt: Date.now() });
-      // } else{
-      //   db.bookmarks.delete(article.url)
-    }
-  }
+  if (set && updates == 0) 
+    await db.bookmarks.put({ ...article, bookmarkedAt: Date.now() });
   return set;
 }
 
+function* urlMap(a){
+  for (let v of a) yield[v.url,v]
+}
 export async function getAllBookmarks() {
-  return await db.bookmarks
+  return Object.defineProperty(await db.bookmarks
     .where("bookmarkedAt")
     .notEqual(0)
-    .toArray();
+    .toArray(),
+    "map",{ get(){
+      return Object.assign(new Map(urlMap(this)),
+      { isBookmarked, setBookmark })
+    }}
+  );
   //orderBy("bookmarkedAt").reverse()
 }

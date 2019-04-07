@@ -8,6 +8,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import NewsList from "./page1";
 import Bookmarks from "./pageBM";
+import { getAllBookmarks } from "../util/storeNews";
 
 function TabContainer({ children, dir }) {
   return (
@@ -33,9 +34,20 @@ const styles = theme => ({
 
 class FullWidthTabs extends React.Component {
   state = {
-    value: 0
+    value: 0,
+    newsList: [[],this.setNewsList]
   };
-
+  setNewsList  = v =>
+    this.setState({
+      newsList: [v,this.setNewsList]
+  })
+  // newsList = () => this.state.newsList
+  componentDidMount(){
+    getAllBookmarks().then(articles => {
+      console.log(articles);
+      this.setNewsList(articles.map);
+    });
+  }
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -69,8 +81,8 @@ class FullWidthTabs extends React.Component {
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <NewsList />
-          <Bookmarks />
+          <NewsList bmList={this.state.newsList}/>
+          <Bookmarks bmList={this.state.newsList}/>
           {children}
           <TabContainer dir={theme.direction}>Item Three</TabContainer>
         </SwipeableViews>
@@ -83,5 +95,7 @@ FullWidthTabs.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 };
-
+FullWidthTabs.defaultProps = {
+  color: 'blue'
+};
 export default withStyles(styles, { withTheme: true })(FullWidthTabs);

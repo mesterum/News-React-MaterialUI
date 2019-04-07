@@ -2,7 +2,7 @@ import Card from "./card";
 import { getTopHeadlines } from "../util/fetchNews";
 import React from "react";
 
-function NewsList() {
+function NewsList({bmList}) {
   let [newsList, setNewsList] = React.useState([]);
   React.useEffect(() => {
     getTopHeadlines().then(r => {
@@ -15,15 +15,16 @@ function NewsList() {
     <>
       {newsList//.sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))
       .map(article => (
-        <Card key={article.url} {...{ article }} />
+          <Card key={article.url} {...{ article, bmList, bookmarked:
+          bmList[0].isBookmarked(article)}} />
       ))}
     </>
   );
 }
 
-export default () => (
+export default props => (
   <ErrorBoundary>
-    <NewsList />
+    <NewsList {...props} />
   </ErrorBoundary>
 );
 class ErrorBoundary extends React.Component {
