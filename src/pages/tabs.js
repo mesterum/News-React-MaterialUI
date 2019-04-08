@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import NewsList from "./page1";
 import Bookmarks from "./pageBM";
 import { getAllBookmarks } from "../util/storeNews";
+import Search from "./Search";
 
 function TabContainer({ children, dir }) {
   return (
@@ -29,23 +30,26 @@ const styles = theme => ({
     flexGrow: 1,
     width: "100%"
     // width: 500
-  }
+  },
 });
 
 class FullWidthTabs extends React.Component {
+  setSt = name => {
+    const fun = v =>
+    this.setState({
+      [name]: [v,fun]
+    })
+    return fun
+  }
   state = {
     value: 0,
-    newsList: [[],this.setNewsList]
+    bmList: [[],this.setSt("bmList")],
+    searchTxt: ["",this.setSt("searchTxt")],
   };
-  setNewsList  = v =>
-    this.setState({
-      newsList: [v,this.setNewsList]
-  })
-  // newsList = () => this.state.newsList
   componentDidMount(){
     getAllBookmarks().then(articles => {
       console.log(articles);
-      this.setNewsList(articles.map);
+      this.setSt("bmList")(articles.map);
     });
   }
   handleChange = (event, value) => {
@@ -75,14 +79,16 @@ class FullWidthTabs extends React.Component {
             <Tab label="Main" />
             <Tab label="Item Three" />
           </Tabs>
+          {this.state.value==0&&<Search searchTxt={this.state.searchTxt}/>}
         </AppBar>
         <SwipeableViews
           axis={theme.direction === "rtl" ? "x-reverse" : "x"}
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <NewsList bmList={this.state.newsList}/>
-          <Bookmarks bmList={this.state.newsList}/>
+          <NewsList bmList={this.state.bmList}
+            searchTxt={this.state.searchTxt}/>
+          <Bookmarks bmList={this.state.bmList}/>
           {children}
           <TabContainer dir={theme.direction}>Item Three</TabContainer>
         </SwipeableViews>

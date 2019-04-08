@@ -29,5 +29,8 @@ const fetchWithErrorHandling = async url => {
   }
 };
 
-export const getTopHeadlines = async () =>
-  fetchWithErrorHandling(`${TOP_URI}?language=en`);
+export const getTopHeadlines = async (searchTxt) =>
+
+  fetchWithErrorHandling(searchTxt
+    ?`${ALL_URI}?language=en&q=${encodeURIComponent(searchTxt)}`
+    :`${TOP_URI}?language=en`);

@@ -2,14 +2,16 @@ import Card from "./card";
 import { getTopHeadlines } from "../util/fetchNews";
 import React from "react";
 
-function NewsList({bmList}) {
+function NewsList({bmList, searchTxt}) {
   let [newsList, setNewsList] = React.useState([]);
   React.useEffect(() => {
-    getTopHeadlines().then(r => {
+    getTopHeadlines(searchTxt[0]).then(r => {
       console.log(r);
       setNewsList(r.articles);
     });
-  }, []);
+  }, [searchTxt]);
+  if(!bmList[0].isBookmarked)
+    bmList[0].isBookmarked=()=>false
 
   return (
     <>
