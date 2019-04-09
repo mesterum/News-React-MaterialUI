@@ -68,7 +68,9 @@ function MediaControlCard(props) {
   const { classes, article, bookmarked = "?", bmList } = props;
   let [newsList, setNewsList] = bmList;//
 
-  const { urlToImage } = data;
+  const proxy = "https://mihai-bandwidth-hero-proxy.herokuapp.com/?bw=&l=10&url="
+  const urlToImage = proxy + encodeURIComponent(article.urlToImage)
+
   if (article) {
     data = { ...article, urlToImage };
   }
