@@ -1,4 +1,4 @@
-# Create React App example
+# News-React-MaterialUI
 
 https://newsapi.mihaimanole.now.sh/
 
