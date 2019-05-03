@@ -1,21 +1,11 @@
 # Create React App example
 
-## How to use
-
-Download the example [or clone the repo](https://github.com/mui-org/material-ui):
-
-```sh
-curl https://codeload.github.com/mui-org/material-ui/tar.gz/master | tar -xz --strip=2 material-ui-master/examples/create-react-app
-cd create-react-app
-```
-
-Install it and run:
-
-```sh
-npm install
-npm run start
-```
+https://newsapi.mihaimanole.now.sh/
 
 ## The idea behind the example
 
-[Create React App](https://github.com/facebookincubator/create-react-app) with no build configuration.
+- [Create React App](https://github.com/facebookincubator/create-react-app) with no build configuration.
+- https://material-ui.com/
+- [News API](https://newsapi.org/)
+- [NewsBuzz](https://github.com/theankurkedia/NewsBuzz) - Firebase backed news reader using News API by Ankur Kedia.
+- [Bandwidth Hero - Live Image Compression](https://github.com/ayastreb/bandwidth-hero)
